@@ -6,12 +6,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.0.0.BUILD-SNAPSHOT'
+        classpath 'org.springframework.boot:spring-boot-gradle-plugin:2.1.8.RELEASE'
     }
 }
 
 plugins {
-    id "org.flywaydb.flyway" version "5.0.7"
+    id "org.flywaydb.flyway" version "5.2.4"
 }
 
 apply plugin: 'java'
@@ -32,18 +32,20 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = 1.8
 
 ext {
-    springboot_version = '2.0.1.RELEASE'
+    springboot_version = '2.1.8.RELEASE'
     springboot_web_version = '2.0.0.M7'
-    springboot_security_version = '1.5.10.RELEASE'
-    spring_security_version = '5.0.0.RELEASE'
+    springboot_security_version = '2.1.8.RELEASE'
+    spring_security_version = '5.1.6.RELEASE'
     mysql_version = '8.0.11'
-    flyway_version = '5.0.7'
+    h2_version = '1.4.199'
+    flyway_version = '5.2.4'
 }
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter:$springboot_version")
     compile("org.springframework.boot:spring-boot-starter-data-jpa:$springboot_version")
     compile("mysql:mysql-connector-java:$mysql_version")
+    compile("com.h2database:h2:$h2_version")
     compile("org.flywaydb:flyway-core:$flyway_version")
     compile("org.springframework.boot:spring-boot-starter-security:$springboot_security_version")
     compile("org.springframework.security:spring-security-core:$spring_security_version")

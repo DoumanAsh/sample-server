@@ -10,7 +10,7 @@ public class GetRate {
     GetRate() {}
 
     @NotBlank(message = "{com.orb.interview.rate.get.FromMissing}")
-    @Pattern(regexp = "JPY|EUR|USD", message = "{com.orb.interview.rate.get.FromMissing}")
+    @Pattern(regexp = "JPY|EUR|USD", message = "{com.orb.interview.rate.get.InvalidCode}")
     public String getFrom() {
         return this.from;
     }
@@ -20,7 +20,7 @@ public class GetRate {
     }
 
     @NotBlank(message = "{com.orb.interview.rate.get.ToMissing}")
-    @Pattern(regexp = "JPY|EUR|USD", message = "{com.orb.interview.rate.get.FromMissing}")
+    @Pattern(regexp = "JPY|EUR|USD", message = "{com.orb.interview.rate.get.InvalidCode}")
     public String getTo() {
         return this.to;
     }

@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.orb.interview.controller.rate.GetRateRsp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -26,44 +28,12 @@ public class RateService {
     //This is blocking so we rely on @Async to run it on separate thread
     //There seem to be new thingy WebClient which is part of reactive stack in Spring
     //But since we don't use it and I'm not familiar with Spring enough, we should be fine with blocking approach, which use thread pool
-    private final RestTemplate http;
+    @Autowired
+    private RestTemplate http;
     private Cache cache = new Cache();
     //Order of initialization for statics is important
     private static final Logger logger = LoggerFactory.getLogger(RateService.class);
     private static final String API_KEY = get_api_key();
-
-    static class FixerRates {
-        @JsonProperty("EUR")
-        public double eur;
-        @JsonProperty("JPY")
-        public double jpy;
-        @JsonProperty("USD")
-        public double usd;
-
-        double get_rate_by_name(String name) throws RuntimeException {
-            switch (name) {
-                case "EUR": return this.eur;
-                case "JPY": return this.jpy;
-                case "USD": return this.usd;
-                default: throw new RuntimeException(String.format("Unknown rate=%s"));
-            }
-        }
-
-        public FixerRates() { }
-    }
-    //NOTE: inner classes must be static when relying on jackson for deserialization
-    @JsonIgnoreProperties(ignoreUnknown=true)
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    static class FixerRsp {
-        @JsonProperty("success")
-        public Boolean success;
-        @JsonProperty("base")
-        public String base;
-        @JsonProperty("rates")
-        public FixerRates rates;
-
-        public FixerRsp() { }
-    }
 
     //Cache is always initialized and for simplicity sake date is 1970 UTC
     //so that it would be invalidated first time always
@@ -84,8 +54,15 @@ public class RateService {
         }
     }
 
-    public RateService() {
-        this.http = new RestTemplateBuilder().setConnectTimeout(Duration.ofSeconds(5)).build();
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplateBuilder().setConnectTimeout(Duration.ofSeconds(5)).build();
+    }
+
+    public RateService() {}
+
+    public void purge_cache() {
+        this.cache.last_req = new Date(0);
     }
 
     private void update_cache() throws RestClientException {

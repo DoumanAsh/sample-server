@@ -16,7 +16,7 @@ This repository contains the skeleton for a working Spring project. It should be
 
 	An authentication token will be returned that can be used on subsequest, authenticated requests. This token should be submitted in the header for authenticated requests: `X-Auth-Token`.
 
-* `GET /rates`
+* `GET /rates`, which occasionally re-fetched currency rates from Fixer API and caches it for 90 minutes
 
 ## Pre-requisites
 
@@ -26,3 +26,8 @@ This repository contains the skeleton for a working Spring project. It should be
 ## Impl notes
 
 - For simplicity sake uses H2 for in-memory DB
+
+- To provide Fixer API key, store the key in file `src/main/resources/secret.fixer` (only key alone)
+
+- Uses Spring's `RestTemplate` which means it relies on thread pool for concurrency. Ideally we'd want to go full async, but this should be more than enough since we cache result.
+And I'm completely unfamiliar with Spring stack, so switching to async was overkill.

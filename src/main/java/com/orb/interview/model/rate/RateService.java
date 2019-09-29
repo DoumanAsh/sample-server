@@ -65,7 +65,7 @@ public class RateService {
         this.cache.last_req = new Date(0);
     }
 
-    private void update_cache() throws RestClientException {
+    private synchronized void update_cache() throws RestClientException {
         Date now = new Date(System.currentTimeMillis());
         long diff_ms = now.getTime() - this.cache.last_req.getTime();
 

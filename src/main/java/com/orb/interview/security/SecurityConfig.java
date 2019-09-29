@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .authorizeRequests()
             .antMatchers("/users").permitAll()
             .antMatchers("/users/login").permitAll()
-            .antMatchers("/**/*").authenticated()
+            .antMatchers("/**/*").permitAll()
             .and()
             .addFilterAfter(authenticationTokenFilter, BasicAuthenticationFilter.class);
   }

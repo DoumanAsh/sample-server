@@ -2,6 +2,9 @@
 /build/
 /bin/
 
+# Secrets
+secret.*
+
 # Ignore Gradle GUI config
 gradle-app.setting
 

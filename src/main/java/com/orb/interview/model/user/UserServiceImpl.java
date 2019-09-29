@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
       user.setEmail(email);
       user.setPassword(password);
       user.setBalance(0);
+      user.setId(generateTokenPayload());
       user.setId(UUID.randomUUID().toString());
       userRepository.save(user);
     } catch (DataAccessException e) {
